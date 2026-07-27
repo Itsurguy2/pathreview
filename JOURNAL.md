@@ -19,3 +19,17 @@ This task aligns well with my experience working on Python projects and navigati
 **Setup confirmation:** [x] App runs locally at localhost:5173
 
 **Cohort ledger:** [ ] Issue added to cohort ledger
+
+## Week 8 — Reproduction & solution planning
+
+**Reproduction commit link:** https://github.com/Itsurguy2/pathreview/commit/98887e14dd3ee6ac5c5f41359c88305333593d1c
+
+**Reproduction summary:**
+Wrote a test in `tests/unit/test_github_tool.py` asserting that `GitHubTool.execute()` returns `has_tests: True` for a repo containing a `tests/` directory. Ran it locally and confirmed it fails today with `AssertionError: assert None is True`, since no `has_tests` key exists in the output at all.
+
+**PLAN.md link:** https://github.com/Itsurguy2/pathreview/blob/feat/50-has-tests-detection/PLAN.md
+
+**Walkthrough video (recommended):** [not recorded]
+
+**Blockers or open questions:**
+Still deciding between the GitHub Contents API vs. the recursive Git Trees API for finding test files anywhere in the repo (not just the root directory) — leaning toward the Trees API but need to check how it behaves on very large repos (truncation) before committing to it in Week 9.
