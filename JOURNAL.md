@@ -33,3 +33,16 @@ Wrote a test in `tests/unit/test_github_tool.py` asserting that `GitHubTool.exec
 
 **Blockers or open questions:**
 Still deciding between the GitHub Contents API vs. the recursive Git Trees API for finding test files anywhere in the repo (not just the root directory) — leaning toward the Trees API but need to check how it behaves on very large repos (truncation) before committing to it in Week 9.
+
+## Week 9 — Solution building & PR submission
+
+### Check-in 1 (mid-week)
+
+**Current progress:**
+All 5 sub-tasks from `PLAN.md` are done. Went with the recursive Git Trees API (`GET /repos/{u}/{r}/git/trees/{default_branch}?recursive=1`) — one call gets the whole file tree instead of walking directories one at a time. Added `_has_tests()` to `GitHubTool`, mirroring `_has_readme()`'s structure, and wired the result into `_fetch_repo_metadata()`'s output. Expanded `tests/unit/test_github_tool.py` from the single Week 8 reproduction test to 6 cases: `tests/` dir, a nested `test/` dir, `pytest.ini`, a loose `test_*.py` file, the negative case, and graceful handling when the tree API call fails. Ran the full `tests/unit` suite before and after: 54 pre-existing failures before (unrelated files — PII scrubber, resume parser, tech detector, etc.), 53 after — the drop is our own test flipping from failing to passing, and no new failures anywhere else. Confirmed `agent/tools/github_tool.py` and `tests/unit/test_github_tool.py` individually pass ruff, black, and mypy with zero errors.
+
+**Next steps:**
+Open the PR (as a draft first) and get peer/mentor feedback in Slack before marking it ready for review.
+
+**Blockers:**
+None. The truncation question from Week 8 is still open as a known limitation, not a blocker — noted in the PR description for reviewers.
