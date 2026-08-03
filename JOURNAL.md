@@ -46,3 +46,22 @@ Open the PR (as a draft first) and get peer/mentor feedback in Slack before mark
 
 **Blockers:**
 None. The truncation question from Week 8 is still open as a known limitation, not a blocker — noted in the PR description for reviewers.
+
+---
+
+### Check-in 2 (end of week)
+
+**PR link:** https://github.com/ascherj/pathreview/pull/221
+
+**Branch:** `feat/50-has-tests-detection`
+
+**What you built:**
+Added a `has_tests` boolean to the repo analysis output. `GitHubTool` now checks — via a single recursive call to GitHub's Git Trees API — whether a repo contains a `tests/`/`test/` directory, a `pytest.ini` file, or any `test_*.py` file anywhere in the tree, and surfaces the result alongside the existing `has_readme` and `star_count` fields.
+
+**Tests added or updated:**
+`tests/unit/test_github_tool.py` — grew from the single Week 8 reproduction test to 6 cases: a `tests/` directory, a nested `test/` directory, a `pytest.ini` file, a loose `test_*.py` file, the negative case (no signals present), and graceful degradation to `False` when the GitHub API call fails.
+
+**Self-review confirmation:** [x] make check passes  [x] make test-unit passes
+*(Both checked per the pre-existing-failures rule documented in the PR: `agent/tools/github_tool.py` and `tests/unit/test_github_tool.py` individually pass ruff/black/mypy with zero errors, and `tests/unit` went from 54 pre-existing failures to 53 — this change introduces no new failures anywhere in the suite. The repo-wide `make check`/`make test-unit` commands still fail overall due to unrelated pre-existing issues across ~26 other files, documented in the PR's "Notes for Reviewers.")*
+
+**Draft PR feedback received from:** none
