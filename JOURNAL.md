@@ -65,3 +65,41 @@ Added a `has_tests` boolean to the repo analysis output. `GitHubTool` now checks
 *(Both checked per the pre-existing-failures rule documented in the PR: `agent/tools/github_tool.py` and `tests/unit/test_github_tool.py` individually pass ruff/black/mypy with zero errors, and `tests/unit` went from 54 pre-existing failures to 53 — this change introduces no new failures anywhere in the suite. The repo-wide `make check`/`make test-unit` commands still fail overall due to unrelated pre-existing issues across ~26 other files, documented in the PR's "Notes for Reviewers.")*
 
 **Draft PR feedback received from:** none
+
+## Week 10 — Iteration & reflection
+
+### Reviewer feedback
+
+**Feedback received:** [x] Yes  [ ] No — still awaiting review
+
+**Summary of feedback:**
+Reviewer feedback covered three points on the `_has_tests()` implementation and its tests:
+1. Praised the pattern-matching against the existing `_has_readme()` method and the choice of a single recursive Git Trees API call over per-path requests.
+2. Praised the 6-case test suite's coverage, but suggested making each test's mock data more minimal and explicitly tied to the signal under test.
+3. Flagged that the truncation limitation noted in my Week 8/9 journal entries (`"truncated": true` on very large repos) had no corresponding test — pointed out that a test documenting a known limitation is valuable because it turns an assumption into executable documentation.
+The review also suggested logging a warning inside the `except Exception: return False` block for better debuggability, while explicitly noting the existing bare-except pattern was "the right call for consistency" with `_has_readme()`.
+
+**How you responded:**
+Posted a written reply on the PR (commit `7c89497`, [PR comment](https://github.com/ascherj/pathreview/pull/221#issuecomment-5235871091)) addressing all three points individually:
+- **Implemented** the suggested truncation test — `test_has_tests_does_not_special_case_truncated_response` — which pins down the current (imperfect but intentional) behavior as documented scope rather than a silent gap.
+- **Acknowledged but did not change** the logging suggestion, since the reviewer's own note validated the existing pattern's consistency with `_has_readme()` in the same file — noted as a takeaway for future projects instead.
+- **Acknowledged but did not change** the mock-clarity suggestion, reasoning that each test's fixture is already small (1-3 entries), so the signal-to-test mapping stays readable without further isolation — framed as feedback for larger fixture sets in future work, not a flaw in this PR.
+
+---
+
+### Reflection
+
+**What was harder than you expected?**
+[fill in]
+
+**What did you learn about working in a large codebase?**
+[fill in]
+
+**How did AI tools help — and where did they fall short?**
+[fill in]
+
+**What would you do differently if you started over?**
+[fill in]
+
+**What are you most proud of from this module?**
+[fill in]
