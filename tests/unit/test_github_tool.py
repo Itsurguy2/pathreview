@@ -23,7 +23,9 @@ REPO_JSON = {
 
 
 def _make_get_mock(
-    tree_entries: list[dict] | None = None, tree_raises: bool = False
+    tree_entries: list[dict] | None = None,
+    tree_raises: bool = False,
+    truncated: bool = False,
 ) -> Callable[..., MagicMock]:
     """Fake httpx.get that returns repo metadata or a tree listing
     depending on the requested URL, matching GitHubTool's real call shape.
@@ -35,7 +37,10 @@ def _make_get_mock(
                 raise Exception("boom")
             response = MagicMock()
             response.raise_for_status.return_value = None
-            response.json.return_value = {"tree": tree_entries or []}
+            response.json.return_value = {
+                "tree": tree_entries or [],
+                "truncated": truncated,
+            }
             return response
 
         response = MagicMock()
@@ -60,8 +65,9 @@ class TestGitHubToolHasTests:
         monkeypatch: pytest.MonkeyPatch,
         tree_entries: list[dict] | None = None,
         tree_raises: bool = False,
+        truncated: bool = False,
     ) -> ToolResult:
-        monkeypatch.setattr("httpx.get", _make_get_mock(tree_entries, tree_raises))
+        monkeypatch.setattr("httpx.get", _make_get_mock(tree_entries, tree_raises, truncated))
         monkeypatch.setattr("httpx.head", lambda *a, **k: MagicMock(status_code=200))
         return tool.execute({"github_username": "octocat", "repo_name": "sample-repo"})
 
@@ -121,5 +127,27 @@ class TestGitHubToolHasTests:
     ) -> None:
         """If the tree API call fails, degrade to False rather than raising."""
         result = self._run(tool, monkeypatch, tree_raises=True)
+        assert result.success is True
+        assert result.data["has_tests"] is False
+
+    def test_has_tests_does_not_special_case_truncated_response(
+        self, tool: GitHubTool, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Known limitation, documented per code review on PR #221: GitHub
+        sets `"truncated": true` on the tree response for very large repos,
+        meaning some paths may be missing. _has_tests() does not currently
+        read that flag -- it just evaluates whatever entries it received. If
+        the actual tests/ directory happens to fall outside the truncated
+        portion, this produces a false negative rather than an error. This
+        test pins down that current behavior so a future change to it is a
+        deliberate decision, not an accidental one.
+        """
+        entries = [
+            {"path": "main.py", "type": "blob"},
+            {"path": "README.md", "type": "blob"},
+            # tests/ exists in the real repo but falls past the truncation
+            # point, so it never appears in this (truncated) tree listing.
+        ]
+        result = self._run(tool, monkeypatch, tree_entries=entries, truncated=True)
         assert result.success is True
         assert result.data["has_tests"] is False
