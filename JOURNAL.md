@@ -90,16 +90,16 @@ Posted a written reply on the PR (commit `7c89497`, [PR comment](https://github.
 ### Reflection
 
 **What was harder than you expected?**
-[fill in]
+What was hardest was choosing what to work on, because I wanted to pick something that would be good to show as a skill to future clients or employers — that made the decision feel high-stakes. The process of figuring out how to approach a situation, and building the confidence to do it, was also difficult. Another thing that's often hard for me is understanding exactly what a question or task is asking — I frequently have to read it multiple times and research specific parts of it before I feel like I actually understand what's being asked.
 
 **What did you learn about working in a large codebase?**
-[fill in]
+I learned that many things can go wrong in a large codebase. I also learned that although something might seem hard at first, it becomes simple once you break it down and understand each piece individually.
 
 **How did AI tools help — and where did they fall short?**
-[fill in]
+AI helped me better understand the situation and how to approach it. AI taught me how to think about solving problems and find patterns. Where it fell short: AI would sometimes do things without explanation, which caused small errors — nothing extreme, but it meant I had to slow down and ask for clarification rather than assume everything was correct.
 
 **What would you do differently if you started over?**
-[fill in]
+I would give myself more time to understand things before diving in, and I would plan more thoroughly up front.
 
 **What are you most proud of from this module?**
-[fill in]
+I am proud of being a part of CodePath and having instructors and staff who helped me finish the course. I am proud to have had the privilege to learn a skill — in many countries, children can't learn a skill because of the conditions they live in. I hope I can help as many people as I can, because life is short. I hope I can be an asset to humanity in a way that creates new possibilities people thought weren't possible.
